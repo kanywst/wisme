@@ -6,20 +6,26 @@
 
 ```mermaid
 graph TD
+    A[ワークロードA]
+    B[ワークロードB]
+    PEP[PEP]
+    PDP["PDP<br>: オプション"]
+    IS["アイデンティティ<br>サーバー"]
+
     subgraph "ワークロード通信"
-        A[ワークロードA] <-->|1. トランスポート接続の確立| B[ワークロードB]
-        A -->|3. HTTP呼び出し| B
-        A <--|5. レスポンス| B
+        B --|1. トランスポート接続の確立|--> A
+        A --|3. HTTP呼び出し|--> B
+        B --|5. レスポンス|--> A
     end
     
     subgraph "認証と認可"
-        B --- PEP[PEP]
-        PEP <-->|4. 認可決定| PDP[PDP\n(オプション)]
+        B --> PEP
+        PEP --|4. 認可決定|--> PDP
     end
     
     subgraph "アイデンティティ管理"
-        IS[アイデンティティ\nサーバー] -->|2a. 認証情報の提供| A
-        IS -->|2b. 認証情報の提供| B
+        IS --|2a. 認証情報の提供|--> A
+        IS --|2b. 認証情報の提供|--> B
     end
     
     classDef workload fill:#a8d1ff,stroke:#0066cc,stroke-width:2px;
